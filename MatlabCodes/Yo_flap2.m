@@ -30,12 +30,27 @@ fps =500;       % frame rate
  for f=1:24
      Ar = xlsread(FN(f,:));
 
+
+%A low-pass Butterworth filter is applied to each of the first 21 columns of data to remove high-frequency noise:
+
+%calculating wing-vectors and rotation matrices
+
 f_cutoff = 45; % cutoff frequency at least 5 times the WBF
 fnorm =f_cutoff/(fps/2);
 [b1,a1] = butter(4,fnorm,'low');
 for j=1:21
 A(:,j) = filtfilt(b1,a1,Ar(:,j));
 end
+
+%For each row of data, the code calculates vectors a and b representing wing orientations, normalizes them, 
+%and computes the normal vector n. It then constructs a rotation matrix 'M' using these vectors.
+
+
+
+%Transforming Data to Wing Coordinate System:
+%Using the rotation matrix M, points from the data are transformed into the wing coordinate system. 
+%The transformed points are then normalized by the length of vector a.
+
 [r,c] =size(A);
 for i=1:r
     % finding the wing axes in the camera frame of reference
@@ -66,6 +81,8 @@ end    % of the i
 % for g=1:12
 % Wn(:,g) = W(:,g)./a(:,4);
 % end
+
+
 Res(f).data = Wn;
 % Res(f).data = W;
 clearvars -except f FN Res fps
@@ -75,3 +92,7 @@ end
 % plot(W(:,9), 'r')
 % plot(W(:,12),'k')
 % plot(W(:,6), 'g') 
+
+%The transformed and normalized data for each file is stored in the structure Res. After processing each file, 
+%intermediate variables are cleared to prepare for the next iteration.
+

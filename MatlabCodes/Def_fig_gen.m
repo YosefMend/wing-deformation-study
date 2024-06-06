@@ -1,4 +1,9 @@
+%loading the data from excel:
+
 load('W_Res.mat')
+
+%beginning frames of each of the 24 videos
+
 frame = [3
     23
     30
@@ -23,6 +28,8 @@ frame = [3
     45
     16
     11];
+
+%end frames of each of the 24 videos 
 
 Efr = [297
     218
@@ -50,6 +57,8 @@ Efr = [297
     145
     ];
 
+%the calculated lift force of each specific wing
+
 Lift = [13.296
     13.330
     13.080
@@ -75,7 +84,7 @@ Lift = [13.296
     13.787
     13.353];
     
-Lift = Lift*9.8./1000   %force in [N]
+Lift = Lift*9.8./1000   %convert lift from grams [g] to Newtons [N]
 figure(1)
 for i =1:12
     A(:,1:12) = Res(i).data(frame(i,1):Efr(i,1),:);
@@ -93,6 +102,14 @@ title(strcat(num2str(round(freq(i,1))),'Hz,', ' L =', num2str(Lift(i,1))));
 axis([0 3 -0.8 0.7])
 clearvars -except i Res frame freq Efr Lift
 end
+
+%This loop processes the first 12 sets of data (Wing 1):
+%Extracts a subset of data from Res based on frame and Efr indices.
+%Calculates the frequency of data capture.
+%Plots data from columns 3, 6, 9, and 12 of the subset against normalized time (t_cap).
+%Each subplot represents a different dataset with frequency and lift values in the title.
+
+
 figure(2)
 title('Wing2');
  for i=13:24
@@ -111,4 +128,8 @@ title(strcat(num2str(round(freq(i,1))),' Hz,', ' L =', num2str(Lift(i,1))));
 axis([0 3 -0.8 0.7])
 clearvars -except i Res frame freq Efr Lift
  end
+
+%This loop processes the next 12 sets of data (Wing 2) in a similar manner to the first loop:
+%Extracts and plots data with the same approach as the first figure.
+%The only difference is the index offset in the subplot positioning to continue from the previous figure.
     
